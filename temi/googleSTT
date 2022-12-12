@@ -1,0 +1,29 @@
+# Imports the Google Cloud client library
+from google.cloud import speech
+import os
+
+credential_path = "cred.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'C:\Program Files\python\client_key.json'
+
+# Instantiates a client
+client = speech.SpeechClient()
+
+# The name of the audio file to transcribe
+gcs_uri = "gs://temirobot-1.appspot.com/audios/2022-12-05-01-02-00.mp4"
+# 無法跑fb
+
+audio = speech.RecognitionAudio(uri=gcs_uri)
+
+config = speech.RecognitionConfig(
+    encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+    sample_rate_hertz=16000,
+    language_code="zh-TW",
+)
+
+# zh-TW
+
+# Detects speech in the audio file
+response = client.recognize(config=config, audio=audio)
+
+for result in response.results:
+    print("Transcript: {}".format(result.alternatives[0].transcript))
